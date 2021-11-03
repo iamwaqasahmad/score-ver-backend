@@ -1,4 +1,8 @@
+## Requriments
+1. Docker
+
 ## Installation 
+1. Clone and cd to the repo
 1. <code>composer install</code> in the repo
 1. <code>./vendor/bin/sail up</code>
 1. <code> Docker ps </code> to find the constainer name
