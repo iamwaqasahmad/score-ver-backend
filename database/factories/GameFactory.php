@@ -17,7 +17,10 @@ class GameFactory extends Factory
     {
         return [
             'user_id' => User::pluck('id')[$this->faker->numberBetween(1,User::count()-1)],
-            'tournament_id' =>  Tournament::pluck('id')[$this->faker->numberBetween(1,Tournament::count()-1)]
+            'tournament_id' =>  Tournament::pluck('id')[$this->faker->numberBetween(1,Tournament::count()-1)],
+            'name' => $this->faker->name(),
+            'visiblity' => $this->faker->randomElement(['public' ,'private']),
+            'status' => $this->faker->randomElement(['enabled' ,'disabled']),
         ];
     }
 }
