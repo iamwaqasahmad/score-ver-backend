@@ -7,21 +7,16 @@ use Illuminate\Http\Request;
 use App\Models\RequestInvitation;
 use App\Models\Game;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Matches;
+use App\Models\GameQuestion;
 
-class MatchesController extends BaseController
+class QuestionController extends BaseController
 {
-    public function index()
-    {
-        $matches = Matches::all();
-        return $this->sendResponse($matches);
-    }
 
-    public function matchesByTournamentId($tournament_id)
+    public function questionsByTournamentId($tournament_id)
     {
         $tournament_id = $tournament_id;
-        $matches = Matches::where('season_id', '=', $tournament_id)->upcoming()->with('homeParticipant')->with('awayParticipant')->get();
-        return $this->sendResponse($matches);
+        $questions = TournamentQuestion::where('tournament_id', '=', $tournament_id)->get();
+        return $this->sendResponse($questions);
     }
 
     public function matchesByGameId($game_id)
@@ -34,12 +29,12 @@ class MatchesController extends BaseController
             'game_id' => $game_id
         ];
 
-        $matches = Matches::where('season_id', '=', $tournament_id)->upcoming()->with('homeParticipant')->with('awayParticipant')->with(['matchPrediction' => function ($query) use ($data) {
+        $questions = GameQuestion::where('game_id', '=', $game_id)->with('tournamentQuestion')->with(['questionPrediction' => function ($query) use ($data) {
             $query->where([
                 ['game_id', $data['game_id']],
                 ['user_id', $data['user_id']],
                 ]); 
         }])->get();
-        return $this->sendResponse($matches);
+        return $this->sendResponse($questions);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\V1\RequestInvitationController;
 
 use App\Http\Controllers\API\V1\MatchesController;
 use App\Http\Controllers\API\V1\PredictionController;
+use App\Http\Controllers\API\V1\QuestionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,6 +38,8 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::get('/games', [GameController::class, 'index']);
     Route::post('/games', [GameController::class, 'store']);
+    Route::get('/participants', [GameController::class, 'getParticipant']);
+
     Route::get('/games/{id}', [GameController::class, 'show']);
     Route::put('/games/{id}', [GameController::class, 'update']);
     Route::delete('/games/{id}', [GameController::class, 'destroy']);
@@ -49,7 +52,10 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('/notifications', [RequestInvitationController::class,  'acceptNotifications']);
 
     Route::get('/matches', [MatchesController::class, 'index']);
-    Route::get('/matches/{tournament_id}', [MatchesController::class, 'matchesByTournamentId']);
+    Route::get('/matches/{game_id}', [MatchesController::class, 'matchesByGameId']);
+
+    Route::get('/questions', [QuestionController::class, 'index']);
+    Route::get('/questions/{game_id}', [QuestionController::class, 'matchesByGameId']);
 
     Route::post('/predicte/match', [PredictionController::class, 'matchPredicte']);
     Route::post('/predicte/question', [PredictionController::class, 'questionPredicte']);
