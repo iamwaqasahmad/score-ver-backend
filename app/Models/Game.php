@@ -22,4 +22,9 @@ class Game extends Model
     public function tournament(){
         return $this->belongsTo(Tournament::class);
     }
+
+    public function season(){
+        return $this->belongsTo(Season::class, 'tournament_id', 'id');
+    }
+
 }

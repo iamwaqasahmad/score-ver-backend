@@ -9,4 +9,14 @@ class Season extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function m()
+    {
+        return $this->hasMany(Matches::class)->Upcoming();
+    }
+
+    public function games()
+    {
+        return $this->hasMany(Game::class);
+    }
 }

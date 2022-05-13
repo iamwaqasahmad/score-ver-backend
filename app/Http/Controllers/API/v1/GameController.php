@@ -7,6 +7,7 @@ use App\Http\Controllers\API\V1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Game;
 use App\Models\GameQuestion;
+use App\Models\Participant;
 use App\Models\TournamentQuestion;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,16 +68,7 @@ class GameController extends BaseController
      */
     public function show($id)
     {
-        $game = Game::with('tournament')->with('gameQuestions')->with('user')->find($id);
-
-        foreach($game->gameQuestions as $i=>$q){
-            $tournamen_question = TournamentQuestion::find($q->question_id);
-            $game->gameQuestions[$i]['id'] = $i;
-            $game->gameQuestions[$i]['text'] = $tournamen_question->question;
-        }
-
-
-        return $this->sendResponse($game);
+        return $this->sendResponse(Game::find($id));
     }
 
     
@@ -121,5 +113,10 @@ class GameController extends BaseController
         $game_request->reciver_id = $request->reciver_id;
         $game_request->sender_id = $request->sender_id;
         return $this->game_request($game);
+    }
+
+    public function getParticipant()
+    {
+        return $this->sendResponse(Participant::all());
     }
 }

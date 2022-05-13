@@ -52,7 +52,7 @@ class Season extends Command
                     ],
                     [
                         'name' => $season->seasonName,
-                        'full_name' => $season->seasonName,
+                        'full_name' =>  $league->name.' '.$season->seasonName,
                     ]
                 );
             }
