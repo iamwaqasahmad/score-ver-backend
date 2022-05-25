@@ -15,4 +15,9 @@ class TournamentQuestion extends Model
         return $this->belongsTo(Tournament::class);
     }
 
+    public function season()
+    {
+        return $this->belongsTo(Season::class, 'tournament_id', 'id');
+    }
+
 }

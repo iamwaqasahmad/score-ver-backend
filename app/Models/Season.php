@@ -19,4 +19,9 @@ class Season extends Model
     {
         return $this->hasMany(Game::class);
     }
+
+    public function league()
+    {
+        return $this->belongsTo(League::class, 'league_id', 'id');
+    }
 }

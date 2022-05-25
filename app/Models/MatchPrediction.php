@@ -14,4 +14,13 @@ class MatchPrediction extends Model
         return $this->belongsTo(Matches::class, 'match_id', 'id');
     }
 
+    public function m(){
+        return $this->belongsTo(Matches::class, 'match_id', 'id');
+    }
+
+    public function pointLog()
+    {
+        return $this->hasMany(PointLog::class, 'ref_id', 'id');
+    }
+
 }

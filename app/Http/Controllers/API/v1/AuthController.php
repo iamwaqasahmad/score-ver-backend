@@ -38,6 +38,7 @@ class AuthController extends BaseController
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
             $success['user_id'] =  $user->id;
+            $success['role'] =  $user->is_admin == 1 ? 'admin' : 'user';
    
             return $this->sendResponse($success, 'User login successfully.');
         } 
