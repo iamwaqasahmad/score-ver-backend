@@ -29,10 +29,15 @@ class Matches extends Model
         return $query->where('status', '=', 0);
     }
 
-    public function scopePredict($query, $gameId)
+    public function matchDay()
     {
-
+        return $this->belongsTo(MatchDay::class, 'matchDay_id', 'id');
     }
+
+    public function score(){
+        return $this->hasOne(Score::class, 'match_id', 'id');
+    }
+
 
     public function scopeMatchPrediction($game_id){
         return $this->hasOne(MatchPrediction::class, 'match_id', 'id');

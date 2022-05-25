@@ -6,6 +6,7 @@ use App\Http\Controllers\API\V1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\RequestInvitation;
 use App\Models\Game;
+use App\Models\GamePlayer;
 use Illuminate\Support\Facades\Auth;
 
 class RequestInvitationController extends BaseController
@@ -67,12 +68,21 @@ class RequestInvitationController extends BaseController
 
     public function acceptNotifications(Request $request)
     {
+        $user_id =  Auth::id();
         $validated = $request->validate([
             'id' => 'required',
         ]);
         $notification = RequestInvitation::find($request->id);
         $notification->status = $request->status;
         $notification->save();
+        
+        if($notification->status == 'accepted'){
+            $gp = new GamePlayer();
+            $gp->user_id =  Auth::id();
+            $gp->game_id = $notification->game_id;
+            $gp->save();
+        }
+
         return $this->sendResponse($notification);
     }
 

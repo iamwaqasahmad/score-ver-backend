@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\V1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Game;
+use App\Models\GamePlayer;
 use App\Models\GameQuestion;
+use App\Models\PointLog;
 use App\Models\Participant;
 use App\Models\TournamentQuestion;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +48,13 @@ class GameController extends BaseController
         $game->user_id = Auth::id();
  
         $game->save();
+        if($game->id){
+            $gp = new GamePlayer();
+            $gp->user_id =  Auth::id();
+            $gp->game_id = $game->id;
+            $gp->save();
+        }
+
         foreach($request->questions as $question_id => $is_selected){
             if($is_selected){
                 $game_questions = new GameQuestion();
@@ -118,5 +127,44 @@ class GameController extends BaseController
     public function getParticipant()
     {
         return $this->sendResponse(Participant::all());
+    }
+
+    public function gamePlayers($game_id)
+    {
+        $gamePlayers = GamePlayer::where('game_id', '=', $game_id)->with('user')->with(['pointLog' => function ($q) {
+            $q->Days();
+          }])->get();
+
+        $users = [];
+        $match_Days = [];
+        foreach($gamePlayers as $gamePlayer ){
+            $user['name'] = $gamePlayer->user->name;
+            //print_r($gamePlayer->pointLog);
+            foreach($gamePlayer->pointLog as $pointLog){
+                $matchDay_name = str_replace(' ', '', $pointLog->matchDay->name);
+                $user[$matchDay_name] = $pointLog->totalPoints;
+                
+                if (!in_array($matchDay_name, $match_Days)){
+                    $match_Days[] = $matchDay_name; 
+                }
+            }
+            array_push($users, $user);
+        }
+        return $this->sendResponse(['users' => $users, 'matchDays' => $match_Days]);
+    }
+
+    public function logs($game_id)
+    {
+        $pointLogs = PointLog::where('game_id', '=', $game_id)->with('user')->with('prediction.m')->with('prediction.m.score')->with('prediction.m.homeParticipant')->with('prediction.m.awayParticipant')->get();
+
+        $logs = [];
+        foreach($pointLogs as $pointLog){
+            $log['name'] =  $pointLog->user->name;
+            $log['prediction'] = $pointLog->prediction->homeParticipant .':'. $pointLog->prediction->awayParticipant;
+            $log['score'] = $pointLog->prediction->m->score->home_participant .':'.  $pointLog->prediction->m->score->away_participant;
+            $log['points'] = $pointLog->points;
+            array_push($logs, $log);
+        }
+        return $this->sendResponse($logs);
     }
 }

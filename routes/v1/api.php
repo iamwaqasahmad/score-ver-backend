@@ -10,6 +10,13 @@ use App\Http\Controllers\API\V1\RequestInvitationController;
 use App\Http\Controllers\API\V1\MatchesController;
 use App\Http\Controllers\API\V1\PredictionController;
 use App\Http\Controllers\API\V1\QuestionController;
+use App\Http\Controllers\API\V1\ReportController;
+
+use App\Http\Controllers\API\V1\admin\UsersController;
+use App\Http\Controllers\API\V1\admin\SeasonController;
+use App\Http\Controllers\API\V1\admin\ScoreController;
+use App\Http\Controllers\API\V1\admin\MatchesController as AdminMatchesController;
+use App\Http\Controllers\API\V1\admin\QuestionController as AdminQuestionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,6 +48,8 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/participants', [GameController::class, 'getParticipant']);
 
     Route::get('/games/{id}', [GameController::class, 'show']);
+    Route::get('/games/{id}/players', [GameController::class, 'gamePlayers']);
+    Route::get('/games/{id}/logs', [GameController::class, 'logs']);
     Route::put('/games/{id}', [GameController::class, 'update']);
     Route::delete('/games/{id}', [GameController::class, 'destroy']);
 
@@ -59,6 +68,26 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::post('/predicte/match', [PredictionController::class, 'matchPredicte']);
     Route::post('/predicte/question', [PredictionController::class, 'questionPredicte']);
+    
+    Route::get('/report', [ReportController::class, 'index']);
+    Route::get('/report/my', [ReportController::class, 'my']);
+    Route::get('/report/my/log', [ReportController::class, 'myLog']);
 
+    /** Admin Routes */
+    Route::group([
+        'prefix' => 'admin',
+        'middleware' => 'is_admin',
+        'as' => 'admin.'
+    ], function() {
+        Route::get('/users', [UsersController::class, 'index']);
+        Route::get('/users/{id}', [UsersController::class, 'getUserById']);
+        Route::post('/users/{id}', [UsersController::class, 'updateUser']);
+        Route::get('/seasons', [SeasonController::class, 'index']);
+        Route::get('/matches', [AdminMatchesController::class, 'index']);
+        Route::get('/scores', [ScoreController::class, 'index']);
+        Route::get('/questions', [AdminQuestionController::class, 'index']);
+    });
+    
+    
     Route::post('/logout', [AuthController::class, 'logout']);
 });

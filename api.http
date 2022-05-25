@@ -33,6 +33,16 @@ GET {{host}}/games/1
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
+### Get Game players by game id
+GET {{host}}/games/5/players
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+### Get Game logs by game id
+GET {{host}}/games/5/logs
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
 ### Get Tournaments
 GET {{host}}/tournaments
 Content-Type: application/json
@@ -149,5 +159,45 @@ Authorization: Bearer {{authtoken}}
 
 ### get all participant
 GET {{host}}/participants HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+
+### get all pointlogs
+GET {{host}}/report/my HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+
+### get all users
+GET {{host}}/admin/users HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+
+### get all seasons
+GET {{host}}/admin/seasons HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+
+### get all matches
+GET {{host}}/admin/matches HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+### get all scores
+GET {{host}}/admin/scores HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+### get all questions
+GET {{host}}/admin/questions HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+
+### get user by id
+GET {{host}}/admin/users/1 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
