@@ -35,8 +35,12 @@ use App\Http\Controllers\API\V1\admin\QuestionController as AdminQuestionControl
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
+
+
 Route::middleware('auth:sanctum')->group( function () {
-    
+    Route::post('/user/activation', [AuthController::class, 'userActivation']);
+    Route::get('/user/resend-verification-code', [AuthController::class, 'resendVerificationCode']);
+
     Route::get('/tournaments', [TournamentController::class, 'index']);
     Route::post('/tournaments', [TournamentController::class, 'store']);
     Route::get('/tournaments/{tournamentId}', [TournamentController::class, 'show']);
@@ -50,6 +54,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/games/{id}', [GameController::class, 'show']);
     Route::get('/games/{id}/players', [GameController::class, 'gamePlayers']);
     Route::get('/games/{id}/logs', [GameController::class, 'logs']);
+    Route::get('/games/{id}/request-invitation', [GameController::class, 'getGameRequestInvitation']);
     Route::put('/games/{id}', [GameController::class, 'update']);
     Route::delete('/games/{id}', [GameController::class, 'destroy']);
 
@@ -58,8 +63,10 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('/invites', [RequestInvitationController::class, 'createInvite']);
     Route::get('/invites', [RequestInvitationController::class, 'getInvites']);
     Route::get('/notifications', [RequestInvitationController::class,   'getNotifications']);
+    Route::get('/notifications/count', [RequestInvitationController::class,   'getNotificationsCount']);
     Route::post('/notifications', [RequestInvitationController::class,  'acceptNotifications']);
-
+    Route::get('/games/{id}/is-requested-or-invited', [RequestInvitationController::class,   'isRequestedOrInvited']);
+    
     Route::get('/matches', [MatchesController::class, 'index']);
     Route::get('/matches/{game_id}', [MatchesController::class, 'matchesByGameId']);
 
@@ -84,8 +91,10 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::post('/users/{id}', [UsersController::class, 'updateUser']);
         Route::get('/seasons', [SeasonController::class, 'index']);
         Route::get('/matches', [AdminMatchesController::class, 'index']);
+        Route::get('/seasons/{seasonId}/matches', [AdminMatchesController::class, 'index']);
         Route::get('/scores', [ScoreController::class, 'index']);
         Route::get('/questions', [AdminQuestionController::class, 'index']);
+        Route::get('/questions/{questionId}', [AdminQuestionController::class, 'show']);
     });
     
     

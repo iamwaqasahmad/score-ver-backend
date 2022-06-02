@@ -11,6 +11,7 @@ use App\Models\GameQuestion;
 use App\Models\PointLog;
 use App\Models\Participant;
 use App\Models\TournamentQuestion;
+use App\Models\RequestInvitation;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -23,7 +24,10 @@ class GameController extends BaseController
      */
     public function index()
     {
-        return $this->sendResponse(Game::with('tournament')->with('gameQuestions')->with('user')->get());
+        $user_id =  Auth::id();
+        $user_games = GamePlayer::where('user_id', '=', $user_id)->pluck('game_id')->toArray();
+        $games = Game::whereIn('id', $user_games)->orWhere('visiblity', '=', 'public')->with('tournament')->with('gameQuestions')->with('user')->get();
+        return $this->sendResponse($games);
     }
 
     
@@ -44,7 +48,7 @@ class GameController extends BaseController
  
         $game->tournament_id = $request->tournamentId;
         $game->name = $request->name;
-        $game->visiblity = $request->visiblity;
+        $game->visiblity = $request->visiblity ? 'public' : 'private';
         $game->user_id = Auth::id();
  
         $game->save();
@@ -77,7 +81,14 @@ class GameController extends BaseController
      */
     public function show($id)
     {
-        return $this->sendResponse(Game::find($id));
+        $user_id =  Auth::id();
+        $game = Game::with('season')->with('user')->get()->find($id);
+        $can_i_predict = GamePlayer::where('user_id', '=',$user_id)->where('game_id','=', $id)->count() >= 1 ? true:false;
+        return $this->sendResponse([
+            'game' => $game,
+            'can_i_predict' => $can_i_predict,
+            'user_id' => $user_id
+        ]);
     }
 
     
@@ -166,5 +177,11 @@ class GameController extends BaseController
             array_push($logs, $log);
         }
         return $this->sendResponse($logs);
+    }
+
+    public function getGameRequestInvitation($game_id)
+    {
+        $request_nvitation = RequestInvitation::where('game_id', '=', $game_id)->with('sender')->with('reciver')->get();
+        return $this->sendResponse($request_nvitation);
     }
 }

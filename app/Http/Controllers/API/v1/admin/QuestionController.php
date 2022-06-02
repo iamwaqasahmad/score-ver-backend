@@ -32,6 +32,13 @@ class QuestionController extends BaseController
         return $this->sendResponse($questions);
     }
 
+    public function show($questionId)
+    {
+        $raw_questions = TournamentQuestion::find($questionId);
+        return $this->sendResponse($raw_questions);
+    }
+
+
     public function createQuestion(Request $request)
     {
         $validated = $request->validate([

@@ -6,9 +6,9 @@ POST http://localhost/api/v1/register
 Content-Type: application/json
 
 {
-  "email":"waqas@ahmad.com",
+  "email":"kdk@dd.com",
   "password":"waqas123",
-  "name":"waqas"
+  "name":"waqasdd"
 }
 
 ###
@@ -29,7 +29,7 @@ Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
 ### Get Game by id
-GET {{host}}/games/1
+GET {{host}}/games/11
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
@@ -40,6 +40,16 @@ Authorization: Bearer {{authtoken}}
 
 ### Get Game logs by game id
 GET {{host}}/games/5/logs
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+### Get Game request Invitation by game id
+GET {{host}}/games/1/request-invitation
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+### Get Game is-requested-or-invited Invitation by game id
+GET {{host}}/games/1/is-requested-or-invited
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
@@ -99,6 +109,11 @@ Authorization: Bearer {{authtoken}}
 
 ### Get Notifications
 GET {{host}}/notifications  HTTP/1.1
+Content-type: application/json
+Authorization: Bearer {{authtoken}}
+
+### Get Notifications count
+GET {{host}}/notifications/count  HTTP/1.1
 Content-type: application/json
 Authorization: Bearer {{authtoken}}
 
@@ -174,6 +189,11 @@ GET {{host}}/admin/users HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
+### get all users
+GET {{host}}/admin/users/4 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
 
 ### get all seasons
 GET {{host}}/admin/seasons HTTP/1.1
@@ -183,6 +203,11 @@ Authorization: Bearer {{authtoken}}
 
 ### get all matches
 GET {{host}}/admin/matches HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+### get all matches by seasonId
+GET {{host}}/admin/seasons/120/matches HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
@@ -196,8 +221,29 @@ GET {{host}}/admin/questions HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
+### get question by id
+GET {{host}}/admin/questions/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
 
 ### get user by id
 GET {{host}}/admin/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+
+### verify email address
+POST {{host}}/user/activation  HTTP/1.1
+Content-type: application/json
+Authorization: Bearer {{authtoken}}
+
+{
+  "code" : "waqas"
+}
+
+
+### resend verification code
+GET {{host}}/user/resend-verification-code
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}

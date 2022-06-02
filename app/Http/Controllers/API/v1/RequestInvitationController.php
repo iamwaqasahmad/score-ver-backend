@@ -86,13 +86,17 @@ class RequestInvitationController extends BaseController
         return $this->sendResponse($notification);
     }
 
-    public function getRequests(Request $request)
+    public function isRequestedOrInvited($game_id)
     {
-
+        $user_id =  Auth::id();
+        $request_or_invitation = RequestInvitation::where('game_id', '=' , $game_id)->where('status', '!=', 'rejected')->IsRequestedOrInvited($user_id)->count();
+        return $this->sendResponse($request_or_invitation);
     }
 
-    public function getInvites(Request $request)
+    public function getNotificationsCount()
     {
-
+        $user_id =  Auth::id();
+        $notifications = RequestInvitation::where('reciver_id', '=' , $user_id)->where('status', '=', 'pending')->count();
+        return $this->sendResponse($notifications);
     }
 }

@@ -18,14 +18,14 @@ class ScoreController extends BaseController
      */
     public function index()
     {
-        $raw_scores = Score::with('match')->with('match.homeParticipant')->with('match.awayParticipant')->get();
+        $raw_scores = Score::with('match')->with('match.homeParticipant')->with('match.awayParticipant')->with('match.season')->get();
         $scores = [];
         foreach($raw_scores as $s){
             $score_obj['id'] = $s->id;
             $score_obj['dateTime'] = $s->match->date . ' '. $s->match->time;
             $score_obj['match'] = $s->match->homeParticipant->short_name .' VS '.$s->match->awayParticipant->short_name;
             $score_obj['score'] = $s->home_participant .':' .$s->away_participant;
-            
+            $score_obj['season'] = $s->match->season->full_name;
             array_push($scores, $score_obj);
         }
 
