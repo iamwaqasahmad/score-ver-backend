@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\V1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Tournament;
+use App\Models\Season;
 use App\Models\TournamentQuestion;
 
 class TournamentController extends BaseController
@@ -17,7 +18,7 @@ class TournamentController extends BaseController
      */
     public function index()
     {
-        return $this->sendResponse(Tournament::with('tournamentQuestions')->get());
+        return $this->sendResponse(Season::with('tournamentQuestions')->get());
     }
 
     /**

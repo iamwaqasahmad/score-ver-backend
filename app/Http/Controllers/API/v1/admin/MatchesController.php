@@ -23,6 +23,13 @@ class MatchesController extends BaseController
         return $this->sendResponse($raw_matches);
     }
 
+    public function matchesBySeasonId($seasonId)
+    {
+        $raw_matches = Matches::where('season_id', '=', $seasonId)->with('season')->with('matchDay')->with('homeParticipant')->with('awayParticipant')->get();
+
+        return $this->sendResponse($raw_matches);
+    }
+
     
     
 }

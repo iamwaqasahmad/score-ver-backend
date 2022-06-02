@@ -25,5 +25,9 @@ class RequestInvitation extends Model
         return $this->belongsTo(User::class, 'reciver_id', 'id');
     }
 
+    public function scopeIsRequestedOrInvited($query, $user_id){
+        return $query->where('reciver_id', '=', $user_id)->orWhere('sender_id', '=', $user_id);;
+    }
+
 
 }

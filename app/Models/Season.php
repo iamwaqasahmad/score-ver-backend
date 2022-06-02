@@ -24,4 +24,9 @@ class Season extends Model
     {
         return $this->belongsTo(League::class, 'league_id', 'id');
     }
+
+    public function tournamentQuestions()
+    {
+        return $this->hasMany(TournamentQuestion::class, 'tournament_id', 'id');
+    }
 }
