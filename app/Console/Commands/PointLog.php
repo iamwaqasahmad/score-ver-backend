@@ -7,6 +7,7 @@ use App\Models\Score;
 use App\Models\MatchPrediction;
 use App\Models\PointLog as PointLogModel;
 use App\lib\PointCalculator;
+use App\Models\GamePlayer;
 
 class PointLog extends Command
 {
@@ -71,6 +72,10 @@ class PointLog extends Command
                 $pl->points = $points;
                 $pl->details = 'Prediction bonus';
                 $pl->save();
+
+                $game_points = GamePlayer::where('user_id', '=', $pl->user_id)->where('game_id', '=', $pl->game_id)->first();
+                $game_points->points += $pl->points;
+                $game_points->save();
             }
         }
     }

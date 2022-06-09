@@ -42,31 +42,37 @@ class QuestionController extends BaseController
     public function createQuestion(Request $request)
     {
         $validated = $request->validate([
-            'tournament_id' => 'required',
-            'question' => 'required'
+            'seasonId' => 'required',
+            'question' => 'required',
+            'points' => 'required'
         ]);
         $question = new TournamentQuestion();
  
-        $question->tournament_id = $request->tournament_id;
+        $question->tournament_id = $request->seasonId;
         $question->question = $request->question;
-        $question->answer = '';
- 
+        $question->points = $request->points;
         $question->save();
 
-        return $this->sendResponse($questions);
+        return $this->sendResponse($question);
     }
 
-    public function createAnswer(Request $request, $id)
+    public function updateQuestion(Request $request, $id)
     {
         $validated = $request->validate([
-            'answer' => 'required'
+            'seasonId' => 'required',
+            'question' => 'required',
+            'points' => 'required'
         ]);
         $question = TournamentQuestion::find($id);
-        $question->answer = $request->answer;
- 
+        if(isset($request->answer) && $request->answer != '')
+            $question->answer = $request->answer;
+
+        $question->tournament_id = $request->seasonId;
+        $question->question = $request->question;
+        $question->points = $request->points;
         $question->save();
 
-        return $this->sendResponse($questions);
+        return $this->sendResponse($question);
     }
 
     

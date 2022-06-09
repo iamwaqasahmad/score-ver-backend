@@ -16,7 +16,7 @@ class PointCalculator{
   protected $result_winner;
   protected $predicted_winner;
 
-  public $points;
+  public $points = 0;
 
 
   public function __construct($real_score, $predicted_score){
@@ -29,6 +29,26 @@ class PointCalculator{
     $this->predicted_winner = $this->get_predicted_winner();
 
     $this->calculate();
+  }
+
+  private function is_result_draw()
+  {
+    return $this->real_score['homeParticipant'] == $this->real_score['awayParticipant'];
+  }
+
+  private function get_result_winner()
+  {
+    return !$this->is_result_draw && $this->real_score['homeParticipant'] > $this->real_score['awayParticipant'] ? 'homeParticipant' : 'awayParticipant';
+  }
+
+  private function is_predicted_draw()
+  {
+    return $this->predicted_score['homeParticipant'] == $this->predicted_score['awayParticipant'];
+  }
+
+  private function get_predicted_winner()
+  {
+    return !$this->is_predicted_draw && $this->predicted_score['homeParticipant'] > $this->predicted_score['awayParticipant'] ? 'homeParticipant' : 'awayParticipant';
   }
 
   private function calculate()
@@ -45,16 +65,6 @@ class PointCalculator{
 
   }
 
-  private function difference()
-  {
-
-    $real_score_diff = (int)$this->real_score['homeParticipant'] - (int)$this->real_score['awayParticipant'];
-
-    $predicted_score_diff = (int)$this->predicted_score['homeParticipant'] - (int)$this->predicted_score['awayParticipant'];
-
-    return $real_score_diff === $predicted_score_diff && !$this->is_draw_predicted();
-  }
-
   private function is_fully_wrong_prediction()
   {
     return $this->real_score['homeParticipant'] != $this->predicted_score['homeParticipant'] && $this->real_score['awayParticipant'] != $this->predicted_score['awayParticipant'];
@@ -62,12 +72,22 @@ class PointCalculator{
 
   private function is_win_predicted()
   {
-    return $this->result_winner == $this->predicted_winner; 
+    return $this->result_winner == $this->predicted_winner && !$this->is_result_draw; 
   }
 
   private function is_draw_predicted()
   {
-    return $this->is_result_draw == $this->is_predicted_draw; 
+    return $this->is_result_draw && $this->is_predicted_draw; 
+  }
+
+  private function difference()
+  {
+
+    $real_score_diff = $this->real_score['homeParticipant'] - $this->real_score['awayParticipant'];
+
+    $predicted_score_diff = $this->predicted_score['homeParticipant'] - $this->predicted_score['awayParticipant'];
+
+    return $real_score_diff === $predicted_score_diff && !$this->is_draw_predicted();
   }
 
   private function is_fully_right_prediction()
@@ -75,24 +95,6 @@ class PointCalculator{
     return $this->real_score['homeParticipant'] == $this->predicted_score['homeParticipant'] && $this->real_score['awayParticipant'] == $this->predicted_score['awayParticipant'];
   }
 
-  private function is_result_draw()
-  {
-    return $this->real_score['homeParticipant'] == $this->real_score['awayParticipant'];
-  }
 
-  private function get_result_winner()
-  {
-    return !$this->is_result_draw && $this->real_score['homeParticipant'] > $this->real_score['awayParticipant'] ? 'homeParticipant' : 'awayParticipant';
-  }
-
-  private function is_predicted_draw()
-  {
-    return $this->real_score['homeParticipant'] == $this->real_score['awayParticipant'];
-  }
-
-  private function get_predicted_winner()
-  {
-    return !$this->is_predicted_draw && $this->predicted_score['homeParticipant'] > $this->predicted_score['awayParticipant'] ? 'homeParticipant' : 'awayParticipant';
-  }
   
 }

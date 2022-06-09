@@ -168,5 +168,12 @@ class AuthController extends BaseController
         // });
         return $this->sendResponse(['code' => $user['link'] ], 'Please, check your email.');
     }
+
+    public function getMe()
+    {
+        $user_id = Auth::id();
+        $user = User::find($user_id);
+        return $this->sendResponse($user);
+    }
     
 }

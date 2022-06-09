@@ -1,8 +1,8 @@
 
-@host = http://localhost/api/v1
+@host = http://157.230.121.246:8000/api/v1
 
 ### Register
-POST http://localhost/api/v1/register
+POST {{host}}/register
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ POST {{host}}/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email":"waqas@ahmad.com",
+  "email":"kdk@dd.com",
   "password":"waqas123"
 }
 
@@ -39,7 +39,7 @@ Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
 ### Get Game logs by game id
-GET {{host}}/games/5/logs
+GET {{host}}/games/2/logs
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}
 
@@ -245,5 +245,52 @@ Authorization: Bearer {{authtoken}}
 
 ### resend verification code
 GET {{host}}/user/resend-verification-code
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+### update user by id
+POST {{host}}/admin/users/22  HTTP/1.1
+Content-type: application/json
+Authorization: Bearer {{authtoken}}
+
+{
+  "name" : "klkld",
+  "email" : "kk@kk.com",
+  "is_admin": "1",
+  "is_activated": "1"
+}
+
+### create score
+POST {{host}}/admin/scores  HTTP/1.1
+Content-type: application/json
+Authorization: Bearer {{authtoken}}
+
+{
+  "match_id" : "34380",
+  "home_participant" : "2",
+  "away_participant": "4"
+}
+
+### create question
+POST {{host}}/admin/questions/14  HTTP/1.1
+Content-type: application/json
+Authorization: Bearer {{authtoken}}
+
+{
+  "seasonId" : "121",
+  "question" : "Who is the 9 team in semi final ?",
+  "points": "9",
+  "answer": "Aus"
+}
+
+
+### dashbaord
+GET {{host}}/dashboard
+Content-Type: application/json
+Authorization: Bearer {{authtoken}}
+
+
+### me
+GET {{host}}/me
 Content-Type: application/json
 Authorization: Bearer {{authtoken}}

@@ -7,7 +7,7 @@ use App\Http\Controllers\API\V1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Score;
 use Illuminate\Support\Facades\Auth;
-
+use Validator;
 
 class ScoreController extends BaseController
 {
@@ -36,20 +36,25 @@ class ScoreController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'match_id' => 'required',
-            'home_participant' => 'required',
-            'away_participant' => 'required',
+            'home_participant' => 'required | numeric',
+            'away_participant' => 'required | numeric',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $score = new Score();
-        $score->match_id = $request->match_id;
-        $score->home_participant = $request->home_participant;
-        $score->away_participant = $request->away_participant;
-        $score->save();
-        
+        $score = Score::updateOrCreate(
+            [
+                'match_id' => $request->match_id
+            ],
+            [
+                'home_participant' => $request->home_participant,
+                'away_participant' => $request->away_participant
+            ]
+        );
+
+         return $this->sendResponse($score);
     }
 
     
