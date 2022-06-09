@@ -147,14 +147,17 @@ class GameController extends BaseController
           }])->get();
 
         $users = [];
-        $match_Days = [];
+        $match_Days = ['T'];
         foreach($gamePlayers as $gamePlayer ){
-            $user['name'] = $gamePlayer->user->name;
+            $user['Name'] = $gamePlayer->user->name;
             //print_r($gamePlayer->pointLog);
+            $user['T'] = 0;
             foreach($gamePlayer->pointLog as $pointLog){
-                $matchDay_name = str_replace(' ', '', $pointLog->matchDay->name);
+                $plmdn = str_replace(' ', '', $pointLog->matchDay->name);
+                $matchDay_name = substr($plmdn, 0, 1);
+                $matchDay_name .= substr($plmdn, -1);
                 $user[$matchDay_name] = $pointLog->totalPoints;
-                
+                $user['T'] += $pointLog->totalPoints;
                 if (!in_array($matchDay_name, $match_Days)){
                     $match_Days[] = $matchDay_name; 
                 }
@@ -170,10 +173,11 @@ class GameController extends BaseController
 
         $logs = [];
         foreach($pointLogs as $pointLog){
-            $log['name'] =  $pointLog->user->name;
-            $log['prediction'] = $pointLog->prediction->homeParticipant .':'. $pointLog->prediction->awayParticipant;
-            $log['score'] = $pointLog->prediction->m->score->home_participant .':'.  $pointLog->prediction->m->score->away_participant;
-            $log['points'] = $pointLog->points;
+            $log['Name'] =  $pointLog->user->name;
+            $log['Match'] =  $pointLog->prediction->m->homeParticipant->short_name. ':'.$pointLog->prediction->m->awayParticipant->short_name;
+            $log['Prediction'] = $pointLog->prediction->homeParticipant .':'. $pointLog->prediction->awayParticipant;
+            $log['Score'] = $pointLog->prediction->m->score->home_participant .':'.  $pointLog->prediction->m->score->away_participant;
+            $log['Points'] = $pointLog->points;
             array_push($logs, $log);
         }
         return $this->sendResponse($logs);

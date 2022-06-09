@@ -7,6 +7,7 @@ use App\Http\Controllers\API\V1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 
 class UsersController extends BaseController
@@ -31,7 +32,7 @@ class UsersController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'is_admin' => 'required | numeric'
         ]);
    
         if($validator->fails()){
@@ -40,10 +41,11 @@ class UsersController extends BaseController
 
         $user = User::find($id);
         $user->name = $request->name;
-        $user->email = $request->email;
+        //$user->email = $request->email; // email should not be changed
         $user->is_admin = $request->is_admin;
-        $user->status = $request->status;
+        $user->is_activated = $request->is_activated;
         $user->save();
+        return $this->sendResponse($user->id);
     }
 
     

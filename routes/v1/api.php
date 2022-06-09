@@ -17,6 +17,7 @@ use App\Http\Controllers\API\V1\admin\SeasonController;
 use App\Http\Controllers\API\V1\admin\ScoreController;
 use App\Http\Controllers\API\V1\admin\MatchesController as AdminMatchesController;
 use App\Http\Controllers\API\V1\admin\QuestionController as AdminQuestionController;
+use App\Http\Controllers\API\V1\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,7 +41,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('/user/activation', [AuthController::class, 'userActivation']);
     Route::get('/user/resend-verification-code', [AuthController::class, 'resendVerificationCode']);
+    Route::get('/me', [AuthController::class, 'getMe']);
 
+    Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/tournaments', [TournamentController::class, 'index']);
     Route::post('/tournaments', [TournamentController::class, 'store']);
     Route::get('/tournaments/{tournamentId}', [TournamentController::class, 'show']);
@@ -93,7 +96,10 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::get('/matches', [AdminMatchesController::class, 'index']);
         Route::get('/seasons/{seasonId}/matches', [AdminMatchesController::class, 'index']);
         Route::get('/scores', [ScoreController::class, 'index']);
+        Route::post('/scores', [ScoreController::class, 'createScore']);
         Route::get('/questions', [AdminQuestionController::class, 'index']);
+        Route::post('/questions', [AdminQuestionController::class, 'createQuestion']);
+        Route::post('/questions/{id}', [AdminQuestionController::class, 'updateQuestion']);
         Route::get('/questions/{questionId}', [AdminQuestionController::class, 'show']);
     });
     
