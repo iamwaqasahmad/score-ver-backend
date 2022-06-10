@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\admin;
+namespace App\Http\Controllers\API\v1\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\API\V1\BaseController as BaseController;
+use App\Http\Controllers\API\v1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Season;
 use Illuminate\Support\Facades\Auth;

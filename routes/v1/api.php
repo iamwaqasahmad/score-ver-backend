@@ -2,22 +2,22 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\V1\AuthController;
-use App\Http\Controllers\API\V1\GameController;
-use App\Http\Controllers\API\V1\TournamentController;
-use App\Http\Controllers\API\V1\RequestInvitationController;
+use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\GameController;
+use App\Http\Controllers\API\v1\TournamentController;
+use App\Http\Controllers\API\v1\RequestInvitationController;
 
-use App\Http\Controllers\API\V1\MatchesController;
-use App\Http\Controllers\API\V1\PredictionController;
-use App\Http\Controllers\API\V1\QuestionController;
-use App\Http\Controllers\API\V1\ReportController;
+use App\Http\Controllers\API\v1\MatchesController;
+use App\Http\Controllers\API\v1\PredictionController;
+use App\Http\Controllers\API\v1\QuestionController;
+use App\Http\Controllers\API\v1\ReportController;
 
-use App\Http\Controllers\API\V1\admin\UsersController;
-use App\Http\Controllers\API\V1\admin\SeasonController;
-use App\Http\Controllers\API\V1\admin\ScoreController;
-use App\Http\Controllers\API\V1\admin\MatchesController as AdminMatchesController;
-use App\Http\Controllers\API\V1\admin\QuestionController as AdminQuestionController;
-use App\Http\Controllers\API\V1\DashboardController;
+use App\Http\Controllers\API\v1\admin\UsersController;
+use App\Http\Controllers\API\v1\admin\SeasonController;
+use App\Http\Controllers\API\v1\admin\ScoreController;
+use App\Http\Controllers\API\v1\admin\MatchesController as AdminMatchesController;
+use App\Http\Controllers\API\v1\admin\QuestionController as AdminQuestionController;
+use App\Http\Controllers\API\v1\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes

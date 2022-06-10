@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API\v1;
    
 use Illuminate\Http\Request;
-use App\Http\Controllers\API\V1\BaseController as BaseController;
+use App\Http\Controllers\API\v1\BaseController as BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
