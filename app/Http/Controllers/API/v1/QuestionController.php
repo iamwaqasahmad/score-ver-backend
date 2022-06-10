@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\API\V1\BaseController as BaseController;
+use App\Http\Controllers\API\v1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\RequestInvitation;
 use App\Models\Game;

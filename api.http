@@ -1,5 +1,5 @@
 
-@host = http://157.230.121.246:8000/api/v1
+@host = https://www.freelancing.studio/score-ver-backend/api/v1
 
 ### Register
 POST {{host}}/register
@@ -239,7 +239,7 @@ Content-type: application/json
 Authorization: Bearer {{authtoken}}
 
 {
-  "code" : "waqas"
+  "code" : "oYQuJ"
 }
 
 
@@ -272,7 +272,7 @@ Authorization: Bearer {{authtoken}}
 }
 
 ### create question
-POST {{host}}/admin/questions/14  HTTP/1.1
+POST {{host}}/admin/questions  HTTP/1.1
 Content-type: application/json
 Authorization: Bearer {{authtoken}}
 
