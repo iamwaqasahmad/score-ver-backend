@@ -14,6 +14,8 @@ use IlluminateFoundationAuthAuthenticatesAndRegistersUsers;
 use IlluminateHttpRequest;
 use DB;
 use Mail;
+use App\Mail\VerifyEmail;
+
 
 class AuthController extends BaseController
 {
@@ -150,22 +152,35 @@ class AuthController extends BaseController
     {
         $user_id = Auth::id();
         $user = User::find($user_id);
-        $this->sendEmail($user);
+        return $this->sendEmail($user);
     }
 
-    private function sendEmail($user)
+    private function sendEmail($userObj)
     {
-        $user = $user->toArray();
+        $user = $userObj->toArray();
         $user['link'] =  Str::random(5);
         DB::table('user_activations')->updateOrInsert(
             ['user_id'=>$user['id']],
             ['token'=>$user['link']]
         );
 
-        // Mail::send('emails.activation', $user, function($message) use ($user) {
-        //     $message->to($user['email']);
+        // Mail::send('emails.verification', $user, function($message) use ($user) {
+        //     $message->to('a93797fe21-db2ae0@inbox.mailtrap.io');
         //     $message->subject('Site - Activation Code');
         // });
+
+
+        $options = array(
+        'unsubscribe_url'   => 'http://mysite.com/unsub',
+        'play_url'          => 'http://google-play.com/myapp',
+        'ios_url'           => 'http://apple-store.com/myapp',
+        'sendfriend_url'    => 'http://mysite.com/send_friend',
+        'webview_url'       => 'http://mysite.com/webview_url',
+        'verify_url' => $user['link']
+        );
+                
+        Mail::to($userObj)->queue(new VerifyEmail($userObj, $options));
+        
         return $this->sendResponse(['code' => $user['link'] ], 'Please, check your email.');
     }
 

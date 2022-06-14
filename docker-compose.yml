@@ -10,6 +10,8 @@ services:
         image: sail-8.0/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -79,18 +81,6 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
-    caddy:
-      image: caddy:latest
-      restart: unless-stopped
-      ports:
-          - '80:80'
-          - '443:443'
-      volumes:
-          - './docker/Caddyfile:/etc/caddy/Caddyfile'
-          - sailcaddy:/data
-          - sailcaddy:/config
-      networks:
-          - sail
 networks:
     sail:
         driver: bridge
@@ -100,6 +90,4 @@ volumes:
     sailredis:
         driver: local
     sailmeilisearch:
-        driver: local
-    sailcaddy:
         driver: local
