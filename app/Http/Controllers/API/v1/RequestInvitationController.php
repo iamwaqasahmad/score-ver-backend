@@ -7,6 +7,7 @@ use App\Http\Controllers\API\v1\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\RequestInvitation;
 use App\Models\Game;
+use App\Models\User;
 use App\Models\GamePlayer;
 use Illuminate\Support\Facades\Auth;
 use Mail;
