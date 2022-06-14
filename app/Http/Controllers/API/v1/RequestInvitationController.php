@@ -9,6 +9,11 @@ use App\Models\RequestInvitation;
 use App\Models\Game;
 use App\Models\GamePlayer;
 use Illuminate\Support\Facades\Auth;
+use Mail;
+use App\Mail\Invite;
+use App\Mail\RequestGame;
+use App\Mail\AcceptInvitation;
+use App\Mail\AcceptRequest;
 
 class RequestInvitationController extends BaseController
 {
@@ -30,8 +35,17 @@ class RequestInvitationController extends BaseController
         $request_invite->game_id = $request->game_id;
         $request_invite->type = 'request';
         $request_invite->status = 'pending';
- 
+
         $request_invite->save();
+        $options = array(
+            'unsubscribe_url'   => 'http://mysite.com/unsub',
+            'play_url'          => 'http://google-play.com/myapp',
+            'ios_url'           => 'http://apple-store.com/myapp',
+            'sendfriend_url'    => 'http://mysite.com/send_friend',
+            'webview_url'       => 'http://mysite.com/webview_url',
+        );
+        $userObj = User::find($request_invite->reciver_id);
+        Mail::to($userObj)->queue(new RequestGame($userObj, $options));
 
         return $this->sendResponse($request_invite);
 
@@ -55,6 +69,17 @@ class RequestInvitationController extends BaseController
         $request_invite->status = 'pending';
  
         $request_invite->save();
+
+        $options = array(
+            'unsubscribe_url'   => 'http://mysite.com/unsub',
+            'play_url'          => 'http://google-play.com/myapp',
+            'ios_url'           => 'http://apple-store.com/myapp',
+            'sendfriend_url'    => 'http://mysite.com/send_friend',
+            'webview_url'       => 'http://mysite.com/webview_url',
+        );
+                
+        $userObj = User::find($request_invite->reciver_id);
+        Mail::to($userObj)->queue(new InviteGame($userObj, $options));
 
         return $this->sendResponse($request_invite);
 
@@ -82,7 +107,20 @@ class RequestInvitationController extends BaseController
             $gp->user_id =  Auth::id();
             $gp->game_id = $notification->game_id;
             $gp->save();
+        
+            $options = array(
+                'unsubscribe_url'   => 'http://mysite.com/unsub',
+                'play_url'          => 'http://google-play.com/myapp',
+                'ios_url'           => 'http://apple-store.com/myapp',
+                'sendfriend_url'    => 'http://mysite.com/send_friend',
+                'webview_url'       => 'http://mysite.com/webview_url',
+            );
+            $userObj = User::find($notification->sender_id);
+            $mail = $notification->type == 'request' ? new AcceptRequest($userObj, $options) : new AcceptInvitation($userObj, $options);
+
+            Mail::to($userObj)->queue($mail);
         }
+
 
         return $this->sendResponse($notification);
     }
