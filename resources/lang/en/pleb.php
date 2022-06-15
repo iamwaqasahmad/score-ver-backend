@@ -64,7 +64,7 @@ return [
         'invite title' => 'A user invited you for a prediction game',
         'invite Paragraph'  => 'Please, download the score-ver app from app/play store and create an account with this email address.',
 
-        'request title' => 'A user invited you for a prediction game',
+        'request title' => 'A user requested you to join for your\'s prediction game',
         'request Paragraph'  => 'Please, download the score-ver app from app/play store and create an account with this email address.',
 
         'accept_invitation title' => 'A user accepted your invitation',

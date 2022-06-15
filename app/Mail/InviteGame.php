@@ -40,9 +40,8 @@ class InviteGame extends Mailable implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(User $member, $options = null)
+    public function __construct($options = null)
     {
-        $this->member = $member;
         $this->options = $options;
     }
 

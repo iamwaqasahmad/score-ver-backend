@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\GamePlayer;
 use Illuminate\Support\Facades\Auth;
 use Mail;
-use App\Mail\Invite;
+use App\Mail\InviteGame;
 use App\Mail\RequestGame;
 use App\Mail\AcceptInvitation;
 use App\Mail\AcceptRequest;
@@ -24,13 +24,18 @@ class RequestInvitationController extends BaseController
             'game_id' => 'required',
         ]);
 
+        $sender_id = Auth::id();
+
+        $check = RequestInvitation::where('sender_id', $sender_id)->Where('game_id', $request->game_id)->first();
+        if($check) return $this->sendError('alreadInvited', ['message' => 
+        'user had been already invited'], 200);
+
+
         //get reciver id from game id
         $game = Game::find($request->game_id);
 
         $request_invite = new RequestInvitation();
 
-        $sender_id = Auth::id();
- 
         $request_invite->sender_id = $sender_id;
         $request_invite->reciver_id = $game->user_id;
         $request_invite->game_id = $request->game_id;
@@ -59,9 +64,23 @@ class RequestInvitationController extends BaseController
             'game_id' => 'required',
 
             ]);
+        
+        $sender_id = Auth::id();
+        $invite_yourself = User::find($sender_id);
+        
+        if($invite_yourself->email == $request->reciver_id)
+        {
+            return $this->sendError('adminOfTheGame', ['message' => 
+            'your are already a user of the game'], 200);
+        }
+
+        $check = RequestInvitation::where('reciver_id', $request->reciver_id)->Where('game_id', $request->game_id)->first();
+        if($check) return $this->sendError('alreadInvited', ['message' => 
+        'user had been already invited'], 200);
+
         $request_invite = new RequestInvitation();
 
-        $sender_id = Auth::id();
+        
  
         $request_invite->sender_id = $sender_id;
         $request_invite->reciver_id = $request->reciver_id;
@@ -79,8 +98,8 @@ class RequestInvitationController extends BaseController
             'webview_url'       => 'http://mysite.com/webview_url',
         );
                 
-        $userObj = User::find($request_invite->reciver_id);
-        Mail::to($userObj)->queue(new InviteGame($userObj, $options));
+        //$userObj = User::find($request_invite->reciver_id);
+        Mail::to($request_invite->reciver_id)->queue(new InviteGame($options));
 
         return $this->sendResponse($request_invite);
 
@@ -89,7 +108,8 @@ class RequestInvitationController extends BaseController
     public function getNotifications()
     {
         $user_id =  Auth::id();
-        $notifications = RequestInvitation::where('reciver_id', '=' , $user_id)->where('status', '=', 'pending')->with('sender')->with('game')->get();
+        $user = User::find($user_id);
+        $notifications = RequestInvitation::where('reciver_id', '=' , $user_id)->orWhere('reciver_id', $user->email)->where('status', '=', 'pending')->with('sender')->with('game')->get();
         return $this->sendResponse($notifications);
     }
 
