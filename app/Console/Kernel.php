@@ -13,7 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\League::class,
+        Commands\Season::class,
+        Commands\Participant::class,
+        Commands\Matches::class,
+        Commands\PointLog::class,
     ];
 
     /**
@@ -25,6 +29,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('League:import')
+                 ->everyThirtyMinutes();
+        $schedule->command('Season:import')
+                 ->everyThirtyMinutes();
+        $schedule->command('Participant:import')
+                 ->everyThirtyMinutes();
+        $schedule->command('Matches:import')
+                 ->everyThirtyMinutes()->withoutOverlapping();
+        $schedule->command('PointLog:import')
+                 ->everyThirtyMinutes()->withoutOverlapping();
     }
 
     /**
