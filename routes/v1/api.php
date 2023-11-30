@@ -38,9 +38,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 
 
-Route::middleware('auth:sanctum')->group( [
-    'middleware' => ['cors']
-] , function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/activation', [AuthController::class, 'userActivation']);
     Route::get('/user/resend-verification-code', [AuthController::class, 'resendVerificationCode']);
     Route::get('/me', [AuthController::class, 'getMe']);

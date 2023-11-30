@@ -60,16 +60,19 @@ class GameController extends BaseController
             $gp->save();
         }
 
-        foreach($request->questions as $question_id => $is_selected){
-            if($is_selected){
-                $game_questions = new GameQuestion();
-                $game_questions->game_id = $game->id;
-                $game_questions->question_id = $question_id;
-                $game_questions->points = 10;
-                $game_questions->save();
+        if($request->questions !== NULL){
+            foreach($request->questions as $question_id => $is_selected){
+                if($is_selected){
+                    $game_questions = new GameQuestion();
+                    $game_questions->game_id = $game->id;
+                    $game_questions->question_id = $question_id;
+                    $game_questions->points = 10;
+                    $game_questions->save();
+                }
+                
             }
-            
         }
+        
 
         return $this->sendResponse($game);
     }
@@ -187,6 +190,8 @@ class GameController extends BaseController
     public function getGameRequestInvitation($game_id)
     {
         $request_nvitation = RequestInvitation::where('game_id', '=', $game_id)->with('sender')->with('reciver')->get();
+        echo "request invitation";
+        print_r($request_nvitation);
         return $this->sendResponse($request_nvitation);
     }
 }

@@ -119,27 +119,34 @@ class RequestInvitationController extends BaseController
         $validated = $request->validate([
             'id' => 'required',
         ]);
+
+
         $notification = RequestInvitation::find($request->id);
         $notification->status = $request->status;
         $notification->save();
+
+        $game_joining_id = ($notification->type == "invite_via_email") ? Auth::id() : $notification->sender_id;
         
         if($notification->status == 'accepted'){
-            $gp = new GamePlayer();
-            $gp->user_id =  Auth::id();
-            $gp->game_id = $notification->game_id;
-            $gp->save();
-        
-            $options = array(
-                'unsubscribe_url'   => 'http://mysite.com/unsub',
-                'play_url'          => 'http://google-play.com/myapp',
-                'ios_url'           => 'http://apple-store.com/myapp',
-                'sendfriend_url'    => 'http://mysite.com/send_friend',
-                'webview_url'       => 'http://mysite.com/webview_url',
-            );
-            $userObj = User::find($notification->sender_id);
-            $mail = $notification->type == 'request' ? new AcceptRequest($userObj, $options) : new AcceptInvitation($userObj, $options);
+            if (!GamePlayer::where('user_id', $game_joining_id )->where('game_id', $notification->game_id)->exists()) {
 
-            Mail::to($userObj)->queue($mail);
+                $gp = new GamePlayer();
+                $gp->user_id  = $game_joining_id;
+                $gp->game_id = $notification->game_id;
+                $gp->save();
+                
+                $options = array(
+                    'unsubscribe_url'   => 'http://mysite.com/unsub',
+                    'play_url'          => 'http://google-play.com/myapp',
+                    'ios_url'           => 'http://apple-store.com/myapp',
+                    'sendfriend_url'    => 'http://mysite.com/send_friend',
+                    'webview_url'       => 'http://mysite.com/webview_url',
+                );
+                $userObj = User::find($notification->sender_id);
+                $mail = $notification->type == 'request' ? new AcceptRequest($userObj, $options) : new AcceptInvitation($userObj, $options);
+
+                Mail::to($userObj)->queue($mail);
+            }
         }
 
 
